@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admosis | Master Client Cheat Sheet & Intelligence Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                            950: '#0f0e26'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090d16;
+            color: #f1f5f9;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.2s ease-in-out;
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/20 ring-1 ring-white/20">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-extrabold text-lg tracking-wider text-white">ADMOSIS</span>
+                            <span class="bg-indigo-500/20 text-indigo-300 text-xs px-2 py-0.5 rounded-full font-medium border border-indigo-500/30">Master Cheat Sheet</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Head of Client Experience • Client Intelligence System</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex items-center space-x-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+                    <button onclick="switchTab('directory')" id="tab-btn-directory" class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                        <span>Client Portfolio</span>
+                    </button>
+                    <button onclick="switchTab('matrix')" id="tab-btn-matrix" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>Specialist Matrix</span>
+                    </button>
+                    <button onclick="switchTab('playbook')" id="tab-btn-playbook" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        <span>AM Playbooks & Risks</span>
+                    </button>
+                </nav>
+
+                <!-- Actions & Date -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden sm:flex flex-col text-right">
+                        <span class="text-xs font-medium text-slate-300">August 2026</span>
+                        <span class="text-[10px] text-emerald-400 flex items-center justify-end gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Live Portfolio Data
+                        </span>
+                    </div>
+                    <button onclick="exportDataJSON()" class="p-2 text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-800 rounded-lg border border-slate-700 transition" title="Export Data JSON">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Top Metrics Bar -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="glass-card rounded-xl p-4 border-l-4 border-l-indigo-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-medium text-slate-400">Total Managed Accounts</p>
+                        <h3 class="text-2xl font-bold text-white mt-1" id="stat-total-accounts">24</h3>
+                    </div>
+                    <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+                        <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2 flex items-center gap-1">
+                    <span class="text-indigo-400 font-semibold" id="stat-active-retainers">14</span> Retainers • <span class="text-cyan-400 font-semibold" id="stat-partner-accounts">10</span> SEO/Partners
+                </p>
+            </div>
+
+            <div class="glass-card rounded-xl p-4 border-l-4 border-l-emerald-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-medium text-slate-400">Multi-Channel Retainers</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">7</h3>
+                    </div>
+                    <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <p class="text-[11px] text-emerald-400 mt-2 flex items-center gap-1 font-medium">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i> Full-Funnel Growth Focus
+                </p>
+            </div>
+
+            <div class="glass-card rounded-xl p-4 border-l-4 border-l-amber-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-medium text-slate-400">On-Hold / Churned</p>
+                        <h3 class="text-2xl font-bold text-white mt-1" id="stat-on-hold">6</h3>
+                    </div>
+                    <div class="p-2 bg-amber-500/10 rounded-lg text-amber-400">
+                        <i data-lucide="pause-circle" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">
+                    Monitored for quarterly re-engagement
+                </p>
+            </div>
+
+            <div class="glass-card rounded-xl p-4 border-l-4 border-l-cyan-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-medium text-slate-400">Onshore AM Workload</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">6 AMs</h3>
+                    </div>
+                    <div class="p-2 bg-cyan-500/10 rounded-lg text-cyan-400">
+                        <i data-lucide="user-check" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">
+                    Lead AM: Gabrielle (12 Accounts)
+                </p>
+            </div>
+        </div>
+
+        <!-- TAB 1: CLIENT PORTFOLIO DIRECTORY -->
+        <div id="view-directory" class="space-y-6">
+
+            <!-- Search and Filter Controls -->
+            <div class="glass-panel rounded-2xl p-4 space-y-4">
+                <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                    
+                    <!-- Search Input -->
+                    <div class="relative w-full md:w-96">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+                        <input type="text" id="search-input" onkeyup="applyFilters()" placeholder="Search client, contact, keyword, AM..." class="w-full bg-slate-900/90 text-sm text-white pl-10 pr-4 py-2.5 rounded-xl border border-slate-700/80 focus:outline-none focus:border-indigo-500 transition placeholder-slate-500">
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                        <!-- Account Manager Filter -->
+                        <select id="filter-am" onchange="applyFilters()" class="bg-slate-900 text-xs text-slate-200 px-3 py-2.5 rounded-xl border border-slate-700/80 focus:outline-none focus:border-indigo-500">
+                            <option value="ALL">All Account Managers</option>
+                            <option value="Gabrielle">Gabrielle (Gabi)</option>
+                            <option value="Steph">Stephanie (Steph)</option>
+                            <option value="Craig">Craig</option>
+                            <option value="Alex">Alex</option>
+                            <option value="Em">Em</option>
+                            <option value="Dan">Dan</option>
+                        </select>
+
+                        <!-- Service Filter -->
+                        <select id="filter-service" onchange="applyFilters()" class="bg-slate-900 text-xs text-slate-200 px-3 py-2.5 rounded-xl border border-slate-700/80 focus:outline-none focus:border-indigo-500">
+                            <option value="ALL">All Services</option>
+                            <option value="SEO">SEO</option>
+                            <option value="Google Ads">Google Ads (PPC)</option>
+                            <option value="Meta Ads">Meta Ads</option>
+                            <option value="TikTok Ads">TikTok Ads</option>
+                            <option value="Web Maintenance">Web Maintenance</option>
+                        </select>
+
+                        <!-- View Toggle -->
+                        <div class="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800">
+                            <button onclick="setViewMode('grid')" id="btn-view-grid" class="p-1.5 rounded-lg text-indigo-400 bg-slate-800 transition">
+                                <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="setViewMode('table')" id="btn-view-table" class="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+                                <i data-lucide="list" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tier Filter Pills -->
+                <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-800">
+                    <button onclick="setTierFilter('ALL')" id="tier-pill-ALL" class="tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white shadow-sm">
+                        All Clients (<span id="count-all">24</span>)
+                    </button>
+                    <button onclick="setTierFilter('Multi-Channel Retainer')" id="tier-pill-Multi-Channel Retainer" class="tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700">
+                        Multi-Channel Retainers (7)
+                    </button>
+                    <button onclick="setTierFilter('Targeted Retainer')" id="tier-pill-Targeted Retainer" class="tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700">
+                        Targeted Retainers (7)
+                    </button>
+                    <button onclick="setTierFilter('SEO / Web / Partner')" id="tier-pill-SEO / Web / Partner" class="tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700">
+                        SEO, Web & Partners (10)
+                    </button>
+                    <button onclick="setTierFilter('On Hold / Concluded')" id="tier-pill-On Hold / Concluded" class="tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700">
+                        On Hold / Concluded (6)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Client Grid View Container -->
+            <div id="client-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- Client Table View Container (Hidden by Default) -->
+            <div id="client-table-container" class="hidden glass-panel rounded-2xl overflow-hidden border border-slate-800">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900/90 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-4">Client Name</th>
+                                <th class="py-3 px-4">Category Tier</th>
+                                <th class="py-3 px-4">Onshore AM</th>
+                                <th class="py-3 px-4">Services Scope</th>
+                                <th class="py-3 px-4">Offshore Specialist Team</th>
+                                <th class="py-3 px-4">Recent Performance Highlight</th>
+                                <th class="py-3 px-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="client-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                            <!-- Dynamically populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: SPECIALIST ALLOCATION MATRIX -->
+        <div id="view-matrix" class="hidden space-y-6">
+            <div class="glass-panel rounded-2xl p-6 space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="users" class="w-5 h-5 text-indigo-400"></i>
+                            Offshore Specialist Allocation Matrix
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Cross-functional team mapping derived from ActiveCollab & Staff Rosters</p>
+                    </div>
+                    <button onclick="window.print()" class="text-xs text-indigo-300 hover:text-white bg-indigo-500/20 border border-indigo-500/30 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                        <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Matrix
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto border border-slate-800 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-slate-300 text-[11px] uppercase tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="py-3.5 px-4 bg-slate-900/90 font-bold text-white">Active Client</th>
+                                <th class="py-3.5 px-4 font-semibold text-indigo-300">Onshore Go-To / AM</th>
+                                <th class="py-3.5 px-4 font-semibold text-emerald-300">SEO Lead</th>
+                                <th class="py-3.5 px-4 font-semibold text-blue-300">PPC (Google Ads)</th>
+                                <th class="py-3.5 px-4 font-semibold text-purple-300">Social (Meta / TikTok)</th>
+                                <th class="py-3.5 px-4 font-semibold text-amber-300">Blog Strategy</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-table-body" class="divide-y divide-slate-800/80 text-slate-300">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: AM PLAYBOOK & RISK MANAGEMENT -->
+        <div id="view-playbook" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Escalation & Performance Troubleshooting Checklist -->
+                <div class="glass-panel rounded-2xl p-6 space-y-4 border-t-4 border-t-rose-500">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400"></i>
+                        AM Performance Escalation Playbook
+                    </h3>
+                    <p class="text-xs text-slate-400">Step-by-step diagnostic process when a client flags a dip in leads or ROI.</p>
+
+                    <div class="space-y-3">
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-rose-300">1. Algorithm & Search Updates Check</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">SEO Step</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">Cross-reference ranking changes with recent Google Core Updates (e.g. March/July updates). Check Search Console for indexing glitches post site migrations (e.g., Telemidi, W&Co Search).</p>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-amber-300">2. Negative Keyword Exclusions Audit</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">PPC Step</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">Verify if brand terms were added as negative keywords. (e.g., <em>Border Express</em> experienced a 39% conversion drop after excluding brand keywords in Performance Max).</p>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-purple-300">3. Ad Account Disruption & Tracking Audit</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">Meta / Dev Step</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">Ensure Meta Pixels and GA4 conversion events match backend platform data (e.g., Roller attribution issues for Padlock'd / Door Seven or account restoration review for Morris Homes).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Tracker & Content Governance Rules -->
+                <div class="glass-panel rounded-2xl p-6 space-y-4 border-t-4 border-t-indigo-500">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-5 h-5 text-indigo-400"></i>
+                        Blog & Content Governance Rules
+                    </h3>
+                    <p class="text-xs text-slate-400">Strict operational guidelines for content creation and publishing workflows.</p>
+
+                    <div class="space-y-3">
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 flex gap-3 items-start">
+                            <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 shrink-0 mt-0.5">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Full Service (Admosis Writes & Publishes)</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Dixit or Colleen writes and posts directly. (e.g., Padlock'd, Morris Homes, CEMA, Finkelstein, Just Chuck It, Admosis).</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 flex gap-3 items-start">
+                            <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 shrink-0 mt-0.5">
+                                <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Publishing Only (Client Writes)</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Client provides drafted copy; Admosis formats and posts on CMS. (e.g., Border Express, The Swim Factory, SPCHG).</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 flex gap-3 items-start">
+                            <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 shrink-0 mt-0.5">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Optimisation Only (No Blog Writing)</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Client manages blogs directly; Admosis optimises titles, meta tags, and indexing. (e.g., Reach SIEM, W&Co Search, Telemidi).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- CLIENT DETAIL MODAL / SLIDE-OVER -->
+    <div id="client-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/80 backdrop-blur-md flex justify-end">
+        <div class="w-full max-w-2xl bg-slate-900 border-l border-slate-800 min-h-screen p-6 space-y-6 shadow-2xl relative flex flex-col justify-between">
+            
+            <div class="space-y-6">
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="modal-tier-badge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Tier Badge</span>
+                            <span id="modal-status-badge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Active</span>
+                        </div>
+                        <h2 id="modal-client-name" class="text-2xl font-black text-white mt-1">Client Name</h2>
+                        <a id="modal-website-link" href="#" target="_blank" class="text-xs text-indigo-400 hover:underline flex items-center gap-1 mt-0.5">
+                            <span id="modal-website-url">https://clientwebsite.com</span>
+                            <i data-lucide="external-link" class="w-3 h-3"></i>
+                        </a>
+                    </div>
+                    <button onclick="closeModal()" class="p-2 text-slate-400 hover:text-white rounded-lg bg-slate-800 hover:bg-slate-700 transition">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Onshore & Offshore Team Bar -->
+                <div class="grid grid-cols-2 gap-3 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800/80">
+                    <div>
+                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Onshore AM / Lead</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <div class="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white">AM</div>
+                            <span id="modal-am-name" class="text-xs font-bold text-white">Gabrielle</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Client Contacts</span>
+                        <p id="modal-contact-person" class="text-xs font-medium text-slate-200 mt-1">Contact Name</p>
+                    </div>
+                </div>
+
+                <!-- Email Recipient Pill Bar -->
+                <div class="bg-slate-950/40 p-3 rounded-xl border border-slate-800 space-y-1">
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Client Email Recipients</span>
+                    <p id="modal-emails" class="text-xs text-slate-300 font-mono break-all">client@domain.com</p>
+                </div>
+
+                <!-- Assigned Offshore Team Matrix -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-400"></i> Assigned Offshore Specialists
+                    </h4>
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <div class="bg-slate-800/50 p-2.5 rounded-lg border border-slate-700/50">
+                            <span class="text-[10px] text-emerald-400 block font-medium">SEO Specialist</span>
+                            <span id="modal-seo-specialist" class="font-semibold text-white mt-0.5 block">Amir Sharif</span>
+                        </div>
+                        <div class="bg-slate-800/50 p-2.5 rounded-lg border border-slate-700/50">
+                            <span class="text-[10px] text-blue-400 block font-medium">PPC Specialist</span>
+                            <span id="modal-ppc-specialist" class="font-semibold text-white mt-0.5 block">Momena Shakeel</span>
+                        </div>
+                        <div class="bg-slate-800/50 p-2.5 rounded-lg border border-slate-700/50">
+                            <span class="text-[10px] text-purple-400 block font-medium">Social Specialist</span>
+                            <span id="modal-social-specialist" class="font-semibold text-white mt-0.5 block">Zeeshan & Umar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Highlights -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> Latest Performance Snapshot
+                    </h4>
+                    <div id="modal-performance-text" class="bg-emerald-950/20 border border-emerald-500/20 p-3.5 rounded-xl text-xs text-slate-300 leading-relaxed">
+                        Performance summary text goes here...
+                    </div>
+                </div>
+
+                <!-- AM Next Steps & Notes -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="check-square" class="w-3.5 h-3.5 text-amber-400"></i> Leader & AM Action Items
+                    </h4>
+                    <div id="modal-action-text" class="bg-slate-950/80 border border-slate-800 p-3.5 rounded-xl text-xs text-amber-200/90 leading-relaxed">
+                        AM next steps and focus notes...
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-500">
+                <span>Admosis Internal Doc #2026-CS</span>
+                <button onclick="closeModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold transition">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // MASTER CLIENT DATA SOURCE (Compiled from all Admosis master exports)
+        const CLIENT_DATA = [
+            {
+                id: "zig-zag",
+                name: "ZigZag Railway",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://zigzagrailway.com.au/",
+                contacts: "Dan, Lee Wiggins",
+                emails: "daniel.zolfel@zigzagrailway.com.au, lee.wiggins@zigzagrailway.com.au",
+                services: ["SEO", "Google Ads", "Meta Ads", "TikTok Ads", "Web Maintenance"],
+                team: {
+                    seo: "Amir Sharif",
+                    ppc: "Momena Shakeel & M. Umair",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "Colleen / Steph"
+                },
+                performance: "July Meta Ads delivered outstanding growth (+59% purchases, +55% revenue, 59% ROAS boost). Google Ads CTR rose 27%. Organic SEO generated 13,163 clicks with a strong 8.62% CTR.",
+                actions: "Deliver partial analytics report (Meta + available data) then full report. CC Mandy on all future reports. Check blog plan with Steph & Dixit for upcoming event promotions.",
+                healthScore: "High Growth"
+            },
+            {
+                id: "padlockd",
+                name: "Padlock'd Escape Rooms",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://padlockd.com.au/",
+                contacts: "Emily, Sean Wilson",
+                emails: "emily@padlockd.com.au, sean.wilson@padlockd.com.au",
+                services: ["SEO", "Google Ads", "Meta Ads"],
+                team: {
+                    seo: "Amir Sharif",
+                    ppc: "Momena Shakeel & M. Sufyan",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "Dixit"
+                },
+                performance: "July Meta Ads hit an outstanding 10.95x ROAS (purchases up 34%, revenue up 53%). Google Ads conversions surged 39%. SEO generated 6,370 clicks with 5.2 average ranking.",
+                actions: "Investigate Door Seven tracking/attribution on Roller. Finalise 90-day SEO plan. Monitor holiday ad spend re-allocation between Padlock'd and Door Seven.",
+                healthScore: "High Growth"
+            },
+            {
+                id: "otherworld",
+                name: "Otherworld HQ",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://www.otherworldhq.com.au/",
+                contacts: "Emily, Sean Wilson",
+                emails: "emily@padlockd.com.au, sean.wilson@padlockd.com.au",
+                services: ["SEO", "Google Ads", "Meta Ads"],
+                team: {
+                    seo: "M. Touseef",
+                    ppc: "Momena Shakeel & M. Umair",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "Colleen / Dixit"
+                },
+                performance: "July Meta Ads generated 48 purchases with a 6.91x ROAS. Google Ads generated 344 total conversions at a low average CPA of $5.08.",
+                actions: "Confirm monthly ad spend across Google, Meta, and TikTok with Emily to align with school holiday/seasonal calendar.",
+                healthScore: "Stable"
+            },
+            {
+                id: "finkelstein",
+                name: "Dr Finkelstein Dental",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://finkelsteindentist.com.au/",
+                contacts: "Finkelstein Team, Michael",
+                emails: "info@finkelsteindentist.com.au, michael@fin.id.au",
+                services: ["SEO", "Google Ads", "Meta Ads", "Web Maintenance"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "Momena Shakeel & M. Sufyan",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "Dixit"
+                },
+                performance: "July Google Ads improved significantly (conversions +17%, clicks +21%, CPC -17%). Organic SEO sessions and user engagement continued steady growth.",
+                actions: "Send monthly reports; next client WIP scheduled for September.",
+                healthScore: "Stable"
+            },
+            {
+                id: "morris-homes",
+                name: "Morris Homes",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle / Craig",
+                website: "https://morrishomes.com.au/",
+                contacts: "Brad, Maree",
+                emails: "brad@morrishomes.com.au",
+                services: ["SEO", "Google Ads", "Meta Ads", "Dev Work"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "Momena Shakeel & M. Sufyan",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "Dixit"
+                },
+                performance: "July Meta Ads surged (+333% leads, 68% CPL improvement). SEO search visibility grew with a 57-position improvement across target keywords.",
+                actions: "Investigate Facebook leads drop and review HubSpot setup. Present mini-audit and TikTok recommendations to client.",
+                healthScore: "High Growth"
+            },
+            {
+                id: "cema",
+                name: "CEMA (Casey Elite Martial Arts)",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://karatecranbourne.com.au/",
+                contacts: "Matt",
+                emails: "info@caseyelitemartialarts.com.au",
+                services: ["SEO", "Google Ads", "Meta Ads"],
+                team: {
+                    seo: "Amir Sharif",
+                    ppc: "Momena Shakeel & M. Umair",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "Dixit"
+                },
+                performance: "Standout July performance on Meta Ads (leads up 186%, Cost Per Lead down 66%). Google Ads conversions rose 33% with CPA down 22%.",
+                actions: "Verify Meta Ads optimisation queries with Craig during weekly WIP.",
+                healthScore: "High Growth"
+            },
+            {
+                id: "stokehouse",
+                name: "The Stokehouse (Restaurant & Pasta Bar)",
+                category: "Multi-Channel Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://stokehouse.com.au/melbourne/",
+                contacts: "Maddie",
+                emails: "maddie@stokehouse.com.au",
+                services: ["SEO", "Google Ads", "Meta Ads"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "Momeena Shakeel & M. Sufyan",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "On-site Active"
+                },
+                performance: "July Meta Ads delivered massive growth—Restaurant bookings up 1,725%; Pasta & Bar bookings up 2,575%.",
+                actions: "Refine Google Ads Search keywords for 'Upstairs'. Meet with Maddie regarding adding wedding campaign ad sets into existing Meta budget.",
+                healthScore: "High Growth"
+            },
+            {
+                id: "four-walls",
+                name: "Four Walls Commercial",
+                category: "Targeted Retainer",
+                status: "Scope Revision",
+                am: "Gabrielle",
+                website: "https://www.fourwallscommercial.com.au/",
+                contacts: "Karen Hamilton (GM)",
+                emails: "Karen@fourwallscommercial.com",
+                services: ["Meta Ads", "LinkedIn Ads", "SEO", "Programmatic Media"],
+                team: {
+                    seo: "Tayyab Farooq",
+                    ppc: "N/A",
+                    social: "Umar Ali & Zeeshan Bashir",
+                    blogWriter: "Colleen"
+                },
+                performance: "July Meta Ads generated strong reach and brand awareness growth. New revised SLA structure prepared ($2,500/mo content rollout + $10,000/mo programmatic plan).",
+                actions: "Send revised SLA agreement and Meta Ads update email to Karen. Plan organic content via HeyOrca.",
+                healthScore: "Attention Needed"
+            },
+            {
+                id: "studio-7",
+                name: "Studio 7 Dancewear",
+                category: "Targeted Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://studio7dancewear.com/",
+                contacts: "Louise",
+                emails: "marketing@studio7dancewear.com, director@studio7dancewear.com",
+                services: ["Google Ads", "Meta Ads"],
+                team: {
+                    seo: "N/A",
+                    ppc: "M. Sufyan",
+                    social: "Zeeshan Bashir & Umar Ali",
+                    blogWriter: "N/A"
+                },
+                performance: "July Meta Ads generated a impressive 27.34x ROAS ($64.9K in sales). Google Ads maintained over $31.5K in conversion value.",
+                actions: "Work with Dixit on reviewing asset folder and testing 2-3 new ad concepts with Louise.",
+                healthScore: "High Growth"
+            },
+            {
+                id: "liberty",
+                name: "Liberty Behavioural Services",
+                category: "Targeted Retainer",
+                status: "Active",
+                am: "Craig",
+                website: "https://libertybehaviouralservices.com/",
+                contacts: "David",
+                emails: "dave@libertybehavioural.com",
+                services: ["SEO", "SQREEM", "Web Maintenance"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "N/A",
+                    social: "Steph / Mary Kay (SQREEM)",
+                    blogWriter: "Colleen / Steph"
+                },
+                performance: "July delivered steady organic growth in website traffic, user engagement, and keyword rankings.",
+                actions: "Send weekly reports and Loom video recap to LBS team. Review SEO optimization plans.",
+                healthScore: "Stable"
+            },
+            {
+                id: "comfort-sleep",
+                name: "Comfort Sleep",
+                category: "Targeted Retainer",
+                status: "Active",
+                am: "Alex",
+                website: "https://www.comfortsleep.com.au/",
+                contacts: "David, Daniel",
+                emails: "davids@comfortsleep.com.au, danield@comfortsleep.com.au",
+                services: ["SEO", "Strategy", "Web Maintenance"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "N/A",
+                    social: "Craig Lawrence (Strategy)",
+                    blogWriter: "Dixit"
+                },
+                performance: "Ongoing web maintenance and SEO strategy. Core keywords maintaining stable local presence.",
+                actions: "Craig leading 11:30 strategy presentation with client.",
+                healthScore: "Stable"
+            },
+            {
+                id: "border-express",
+                name: "Border Express",
+                category: "Targeted Retainer",
+                status: "Active",
+                am: "Gabrielle / Craig",
+                website: "https://www.borderexpress.com.au/",
+                contacts: "Crista, Corey",
+                emails: "crista.beckhaus@fmhgroup.com.au, coreytaylor@borderexpress.com.au",
+                services: ["SEO", "Google Ads", "Web Maintenance"],
+                team: {
+                    seo: "Amir Sharif",
+                    ppc: "Momena Shakeel & M. Sufyan",
+                    social: "N/A",
+                    blogWriter: "Publish Only"
+                },
+                performance: "SEO generated 11,161 organic clicks from 99,497 impressions (11.22% CTR). Average ranking position improved to 11.0.",
+                actions: "Build Freightsafe Warranty LP strategy deck. Review contract inclusions with Kevin.",
+                healthScore: "Stable"
+            },
+            {
+                id: "bsc-supps",
+                name: "BSC Supplements",
+                category: "Targeted Retainer",
+                status: "Active",
+                am: "Em",
+                website: "https://www.bsccompression.com/",
+                contacts: "Sharon",
+                emails: "sharon@bsc.com",
+                services: ["TikTok Ads"],
+                team: {
+                    seo: "N/A",
+                    ppc: "N/A",
+                    social: "Umar Ali",
+                    blogWriter: "N/A"
+                },
+                performance: "Active TikTok ads running using Motion creative formats.",
+                actions: "Confirm creative deliverables and performance report cadence.",
+                healthScore: "Stable"
+            },
+            {
+                id: "rachel-disalvo",
+                name: "Rachel Disalvo Ceramics",
+                category: "Targeted Retainer",
+                status: "Active",
+                am: "Gabrielle",
+                website: "https://racheldisalvo.com/",
+                contacts: "Rach",
+                emails: "rach@racheldisalvo.com",
+                services: ["Meta Ads"],
+                team: {
+                    seo: "N/A",
+                    ppc: "N/A",
+                    social: "Zeeshan Bashir",
+                    blogWriter: "N/A"
+                },
+                performance: "June EOFY campaign delivered 277% purchase growth & 9.02 ROAS; steady July performance post-sale.",
+                actions: "Maintain cost-efficient brand campaigns and monitor inventory levels.",
+                healthScore: "Stable"
+            },
+            {
+                id: "acenergy",
+                name: "ACEnergy",
+                category: "SEO / Web / Partner",
+                status: "Active",
+                am: "Steph",
+                website: "https://acenergy.com.au/",
+                contacts: "Claire Baertels",
+                emails: "Claire.Baertels@acenergy.com.au",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "Ghulam Ali",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "Client Approvals"
+                },
+                performance: "July delivered steady SEO progress, with improved keyword visibility and stable organic traffic.",
+                actions: "Adding new blog section to website footer. Client working on blog topic approvals internally.",
+                healthScore: "Stable"
+            },
+            {
+                id: "good-crowd",
+                name: "The Good Crowd",
+                category: "SEO / Web / Partner",
+                status: "Active",
+                am: "Steph",
+                website: "https://thegoodcrowd.com.au/",
+                contacts: "Ben Aharfi",
+                emails: "ba@thegoodcrowd.com.au",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "M. Waleed",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "Dixit"
+                },
+                performance: "July SEO performance showed positive progress, with improved keyword rankings, clicks, and CTR.",
+                actions: "Expand non-branded search visibility and add dedicated service pages.",
+                healthScore: "Needs Focus"
+            },
+            {
+                id: "just-chuck-it",
+                name: "Just Chuck It",
+                category: "SEO / Web / Partner",
+                status: "Active",
+                am: "Steph",
+                website: "https://justchuckit.com.au/",
+                contacts: "Andrew Milton",
+                emails: "info@justchuckit.com.au",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "Dixit"
+                },
+                performance: "July delivered steady organic growth, stronger search visibility, and increased site engagement.",
+                actions: "Maintain technical SEO foundations and monthly blog publishing schedule.",
+                healthScore: "Stable"
+            },
+            {
+                id: "adara-group",
+                name: "Adara Group",
+                category: "SEO / Web / Partner",
+                status: "Partner / Active",
+                am: "Gabrielle",
+                website: "https://www.adaragroup.org/",
+                contacts: "Laura",
+                emails: "laura.brokertowart@adaragroup.org",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "Hamza Qaisar",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "N/A"
+                },
+                performance: "July delivered steady growth across organic clicks, search sessions, and user engagement.",
+                actions: "Kiz finishing operational support updates for print/brand flow.",
+                healthScore: "Stable"
+            },
+            {
+                id: "global-legacy",
+                name: "Global Legacy Partners",
+                category: "SEO / Web / Partner",
+                status: "Partner / Active",
+                am: "Gabrielle",
+                website: "https://globallegacy.partners/",
+                contacts: "Richard Cholewick",
+                emails: "rc@globallegacy.partners",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "M. Waleed",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "Colleen"
+                },
+                performance: "SEO search visibility improved with stronger impressions. User interaction remained solid.",
+                actions: "SEO content completed for 7 pages. Client site requires full redesign to support new copy volume.",
+                healthScore: "Action Required"
+            },
+            {
+                id: "telemidi",
+                name: "Telemidi",
+                category: "SEO / Web / Partner",
+                status: "Partner / Active",
+                am: "Gabrielle",
+                website: "https://telemidi.com/",
+                contacts: "Matt Bray",
+                emails: "mb@telemidi.com",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "Amir Sharif",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "Client Provides"
+                },
+                performance: "July SEO showed gains in organic clicks (+36%), impressions (+14%), and average ranking position (11.0).",
+                actions: "Remove remaining dummy content from site redesign and optimise for SEO, AEO, and GEO.",
+                healthScore: "Needs Focus"
+            },
+            {
+                id: "agency-stack",
+                name: "Agency Stack",
+                category: "SEO / Web / Partner",
+                status: "Partner / Active",
+                am: "Gabrielle",
+                website: "https://agencystack.global/",
+                contacts: "Team",
+                emails: "tm@agencystack.global",
+                services: ["SEO", "Web Maintenance"],
+                team: {
+                    seo: "M. Salman",
+                    ppc: "N/A",
+                    social: "Thiko",
+                    blogWriter: "Thiko"
+                },
+                performance: "SEO performance showed progress in keyword rankings and CTR; branded queries remain solid.",
+                actions: "Focus on rebuilding non-branded query rankings and organic traffic growth.",
+                healthScore: "Needs Focus"
+            },
+            {
+                id: "woods-co",
+                name: "Woods & Co (AU / USA)",
+                category: "SEO / Web / Partner",
+                status: "Active",
+                am: "Dan",
+                website: "https://www.woodsco.com.au/",
+                contacts: "Caleb",
+                emails: "caleb@woodsco.com.au, ashley@wcosearch.com",
+                services: ["SEO"],
+                team: {
+                    seo: "M. Salman (AU) / Ahmed Khalid (USA)",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "Dan Writes"
+                },
+                performance: "Organic visibility and sessions maintaining long-term base despite post-update fluctuations.",
+                actions: "Recover keyword position drops post-Google update through content restructuring.",
+                healthScore: "Needs Focus"
+            },
+            {
+                id: "reach-siem",
+                name: "Reach SIEM Reap",
+                category: "SEO / Web / Partner",
+                status: "Partner / Active",
+                am: "Gabrielle",
+                website: "https://www.reachsiemreap.org/",
+                contacts: "Emily",
+                emails: "Emily@reachsiemreap.org",
+                services: ["SEO", "PPC"],
+                team: {
+                    seo: "M. Salman & Momena Shakeel",
+                    ppc: "Momena Shakeel",
+                    social: "N/A",
+                    blogWriter: "Optimise Only"
+                },
+                performance: "SEO visibility remained stable with positive growth in user interactions and site activity.",
+                actions: "Optimise client-provided blogs and meta descriptions.",
+                healthScore: "Stable"
+            },
+            {
+                id: "assetora",
+                name: "Assetora",
+                category: "On Hold / Concluded",
+                status: "On Hold",
+                am: "Craig",
+                website: "https://assetora.com/",
+                contacts: "Darren",
+                emails: "dy@assetora.com",
+                services: ["SEO", "Performance Marketing"],
+                team: {
+                    seo: "Ghulam Ali",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "N/A"
+                },
+                performance: "Client ceased active retainer in May. Campaign setup prepared for SMSF launch.",
+                actions: "Dan to meet with Darren regarding proposed SMSF campaign launch approval.",
+                healthScore: "On Hold"
+            },
+            {
+                id: "wilpak",
+                name: "Wilpak Group International",
+                category: "On Hold / Concluded",
+                status: "Concluded",
+                am: "Steph",
+                website: "https://www.wgbinduction.com.au/",
+                contacts: "Andrew Mitchell",
+                emails: "andrew.mitchell@wilpakgroup.com",
+                services: ["SEO", "LinkedIn Boosting"],
+                team: {
+                    seo: "Ghulam Ali",
+                    ppc: "N/A",
+                    social: "N/A",
+                    blogWriter: "N/A"
+                },
+                performance: "Retainer concluded as of 30 June 2026.",
+                actions: "Archive project files in ActiveCollab.",
+                healthScore: "Concluded"
+            },
+            {
+                id: "case-labs",
+                name: "Case Laboratory",
+                category: "On Hold / Concluded",
+                status: "Paused",
+                am: "Em",
+                website: "https://caselaboratory.com.au/",
+                contacts: "Chris",
+                emails: "enquiries@caselaboratoryau.com",
+                services: ["Meta Ads", "TikTok Ads"],
+                team: {
+                    seo: "N/A",
+                    ppc: "N/A",
+                    social: "Zeeshan Bashir",
+                    blogWriter: "N/A"
+                },
+                performance: "NZ Meta Ads trial was highly successful. Paused temporarily for inventory restocking.",
+                actions: "Check in with Chris in 60 days to schedule campaign re-activation.",
+                healthScore: "Paused"
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let currentTab = 'directory';
+        let currentViewMode = 'grid';
+        let currentTierFilter = 'ALL';
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            applyFilters();
+            renderMatrix();
+        });
+
+        // SWITCH TABS
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('view-directory').classList.add('hidden');
+            document.getElementById('view-matrix').classList.add('hidden');
+            document.getElementById('view-playbook').classList.add('hidden');
+
+            document.getElementById('tab-btn-directory').className = "px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all";
+            document.getElementById('tab-btn-matrix').className = "px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all";
+            document.getElementById('tab-btn-playbook').className = "px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center space-x-2 transition-all";
+
+            if(tab === 'directory') {
+                document.getElementById('view-directory').classList.remove('hidden');
+                document.getElementById('tab-btn-directory').className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30";
+            } else if(tab === 'matrix') {
+                document.getElementById('view-matrix').classList.remove('hidden');
+                document.getElementById('tab-btn-matrix').className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30";
+            } else if(tab === 'playbook') {
+                document.getElementById('view-playbook').classList.remove('hidden');
+                document.getElementById('tab-btn-playbook').className = "px-4 py-2 rounded-lg text-xs font-semibold flex items-center space-x-2 transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30";
+            }
+            lucide.createIcons();
+        }
+
+        // VIEW MODE TOGGLE (Grid vs Table)
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            if(mode === 'grid') {
+                document.getElementById('client-grid-container').classList.remove('hidden');
+                document.getElementById('client-table-container').classList.add('hidden');
+                document.getElementById('btn-view-grid').className = "p-1.5 rounded-lg text-indigo-400 bg-slate-800 transition";
+                document.getElementById('btn-view-table').className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition";
+            } else {
+                document.getElementById('client-grid-container').classList.add('hidden');
+                document.getElementById('client-table-container').classList.remove('hidden');
+                document.getElementById('btn-view-grid').className = "p-1.5 rounded-lg text-slate-400 hover:text-white transition";
+                document.getElementById('btn-view-table').className = "p-1.5 rounded-lg text-indigo-400 bg-slate-800 transition";
+            }
+        }
+
+        // TIER FILTER PILL
+        function setTierFilter(tier) {
+            currentTierFilter = tier;
+            document.querySelectorAll('.tier-pill').forEach(btn => {
+                btn.className = "tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700";
+            });
+            const activePill = document.getElementById(`tier-pill-${tier}`);
+            if(activePill) {
+                activePill.className = "tier-pill text-xs px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white shadow-sm";
+            }
+            applyFilters();
+        }
+
+        // APPLY FILTERS & SEARCH
+        function applyFilters() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const amVal = document.getElementById('filter-am').value;
+            const serviceVal = document.getElementById('filter-service').value;
+
+            const filtered = CLIENT_DATA.filter(client => {
+                // Tier filter
+                if(currentTierFilter !== 'ALL' && client.category !== currentTierFilter) return false;
+                // AM filter
+                if(amVal !== 'ALL' && !client.am.toLowerCase().includes(amVal.toLowerCase())) return false;
+                // Service filter
+                if(serviceVal !== 'ALL' && !client.services.includes(serviceVal)) return false;
+                // Search term
+                if(searchVal) {
+                    const matchName = client.name.toLowerCase().includes(searchVal);
+                    const matchAM = client.am.toLowerCase().includes(searchVal);
+                    const matchContact = client.contacts.toLowerCase().includes(searchVal);
+                    const matchSEO = client.team.seo.toLowerCase().includes(searchVal);
+                    const matchServices = client.services.some(s => s.toLowerCase().includes(searchVal));
+                    return matchName || matchAM || matchContact || matchSEO || matchServices;
+                }
+                return true;
+            });
+
+            renderGrid(filtered);
+            renderTable(filtered);
+        }
+
+        // RENDER GRID CARDS
+        function renderGrid(clients) {
+            const container = document.getElementById('client-grid-container');
+            if(clients.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-panel rounded-2xl">
+                        <i data-lucide="search-x" class="w-10 h-10 text-slate-500 mx-auto mb-3"></i>
+                        <h4 class="text-sm font-semibold text-slate-300">No matching clients found</h4>
+                        <p class="text-xs text-slate-500 mt-1">Try broadening your search term or adjusting filters.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = clients.map(client => {
+                const tierColor = client.category === 'Multi-Channel Retainer' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30' :
+                                  client.category === 'Targeted Retainer' ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' :
+                                  client.category === 'SEO / Web / Partner' ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' : 'bg-amber-500/10 text-amber-300 border-amber-500/30';
+
+                return `
+                    <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <!-- Top Status & Tier -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${tierColor}">
+                                    ${client.category}
+                                </span>
+                                <span class="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    ${client.status}
+                                </span>
+                            </div>
+
+                            <!-- Client Name & AM -->
+                            <div>
+                                <h3 class="text-lg font-extrabold text-white group-hover:text-indigo-300 transition">${client.name}</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">AM: <span class="text-slate-200 font-semibold">${client.am}</span> • Contact: <span class="text-slate-300">${client.contacts}</span></p>
+                            </div>
+
+                            <!-- Services Scope Badges -->
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                ${client.services.map(s => `
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/60 font-medium">${s}</span>
+                                `).join('')}
+                            </div>
+
+                            <!-- Offshore Specialist Snapshot -->
+                            <div class="bg-slate-950/50 p-2.5 rounded-xl border border-slate-800/80 text-[11px] grid grid-cols-2 gap-1.5 text-slate-400">
+                                <div>SEO: <span class="text-slate-200 font-medium">${client.team.seo}</span></div>
+                                <div>PPC: <span class="text-slate-200 font-medium">${client.team.ppc}</span></div>
+                            </div>
+
+                            <!-- Highlight Snippet -->
+                            <div class="bg-emerald-950/20 border border-emerald-500/20 p-2.5 rounded-xl text-[11px] text-slate-300 line-clamp-2">
+                                <strong class="text-emerald-400 font-semibold">Latest ROI:</strong> ${client.performance}
+                            </div>
+                        </div>
+
+                        <!-- Card Action Footer -->
+                        <button onclick="openModal('${client.id}')" class="w-full py-2 bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+                            <span>View Full Intel & AM Actions</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // RENDER TABLE
+        function renderTable(clients) {
+            const body = document.getElementById('client-table-body');
+            body.innerHTML = clients.map(client => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="py-3 px-4 font-bold text-white">${client.name}</td>
+                    <td class="py-3 px-4 text-slate-300">${client.category}</td>
+                    <td class="py-3 px-4 font-semibold text-indigo-300">${client.am}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex flex-wrap gap-1">
+                            ${client.services.map(s => `<span class="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">${s}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-slate-300">SEO: ${client.team.seo} | PPC: ${client.team.ppc}</td>
+                    <td class="py-3 px-4 text-slate-300 max-w-xs truncate">${client.performance}</td>
+                    <td class="py-3 px-4 text-right">
+                        <button onclick="openModal('${client.id}')" class="text-indigo-400 hover:text-white font-semibold">Details</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // RENDER MATRIX TAB
+        function renderMatrix() {
+            const body = document.getElementById('matrix-table-body');
+            body.innerHTML = CLIENT_DATA.map(client => `
+                <tr class="hover:bg-slate-800/40 transition">
+                    <td class="py-3 px-4 font-extrabold text-white">${client.name}</td>
+                    <td class="py-3 px-4 text-indigo-300 font-semibold">${client.am}</td>
+                    <td class="py-3 px-4 text-emerald-300">${client.team.seo}</td>
+                    <td class="py-3 px-4 text-blue-300">${client.team.ppc}</td>
+                    <td class="py-3 px-4 text-purple-300">${client.team.social}</td>
+                    <td class="py-3 px-4 text-amber-300">${client.team.blogWriter}</td>
+                </tr>
+            `).join('');
+        }
+
+        // MODAL SLIDE-OVER FUNCTIONS
+        function openModal(clientId) {
+            const client = CLIENT_DATA.find(c => c.id === clientId);
+            if(!client) return;
+
+            document.getElementById('modal-client-name').innerText = client.name;
+            document.getElementById('modal-tier-badge').innerText = client.category;
+            document.getElementById('modal-status-badge').innerText = client.status;
+            document.getElementById('modal-website-url').innerText = client.website;
+            document.getElementById('modal-website-link').href = client.website;
+            document.getElementById('modal-am-name').innerText = client.am;
+            document.getElementById('modal-contact-person').innerText = client.contacts;
+            document.getElementById('modal-emails').innerText = client.emails;
+
+            document.getElementById('modal-seo-specialist').innerText = client.team.seo;
+            document.getElementById('modal-ppc-specialist').innerText = client.team.ppc;
+            document.getElementById('modal-social-specialist').innerText = client.team.social;
+
+            document.getElementById('modal-performance-text').innerText = client.performance;
+            document.getElementById('modal-action-text').innerText = client.actions;
+
+            document.getElementById('client-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('client-modal').classList.add('hidden');
+        }
+
+        // EXPORT DATA JSON
+        function exportDataJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(CLIENT_DATA, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "admosis_master_client_cheat_sheet.json");
+            dlAnchorElem.click();
+        }
+    </script>
+</body>
+</html>
